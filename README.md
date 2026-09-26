@@ -18,7 +18,7 @@ and it works through them with tools, then exits with `success`, `failed` or
 It runs on the [Twigg](https://twigg.ai) API, which manages the context. twigg-agent is purely a
 harness: it runs the agent loop and the tools on your machine.
 
-- **Ultra lightweight:** a single file of under 1 MB with no dependencies, a 240 KB download,
+- **Ultra lightweight:** a single file of about 105 kB with no dependencies, a 40 kB download,
   starting in under 0.1 s. See [At a glance](#at-a-glance).
 - **Built-in tools:** read, write, edit, delete, glob, grep, web_fetch, todo, wait, parallel
   subagents, and bash if you enable it.
@@ -38,12 +38,19 @@ harness: it runs the agent loop and the tools on your machine.
 
 | | |
 | --- | --- |
-| Installed size | 920 KB, one file |
-| Download | 240 KB |
+| Installed size | 105 kB, one file |
+| Download | 40 kB |
 | Runtime dependencies | none |
+| Start-up | under 0.1 s |
 
-That's about 1 MB installed, where full coding-agent CLIs are typically 100–400 MB. Measured for
-v0.1.0; needs Node 22.13 or later.
+That's about 0.1 MB installed, where full coding-agent CLIs are typically 100–400 MB. It needs
+Node 22.13 or later.
+
+Twigg keeps the conversation, fits it to the model and talks to the providers, so the harness
+holds no provider SDKs, no transcript store and no token counting. What is left (the agent loop,
+the tools, the permissions, and small readers for settings, frontmatter and HTML) is written
+against Node's standard library. The build fails if the file grows past 120 kB or needs a
+package at run time.
 
 ## Install
 

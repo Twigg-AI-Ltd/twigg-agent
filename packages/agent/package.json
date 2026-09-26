@@ -30,13 +30,13 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch",
     "gen:api": "pnpm dlx --package openapi-typescript@7 --package typescript@5 openapi-typescript https://api.twigg.ai/openapi.json --empty-objects-unknown -o src/api/schema.d.ts",
-    "prepack": "tsup"
+    "prepack": "node build.mjs"
   },
   "devDependencies": {
-    "picomatch": "^4.0.7",
-    "tsup": "^8.5.1"
+    "esbuild": "^0.27.7",
+    "picomatch": "^4.0.7"
   }
 }
