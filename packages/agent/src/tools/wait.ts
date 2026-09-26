@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { formatDuration } from "../log/index.js";
 import { defineTool, ok } from "./util.js";
 
@@ -12,13 +12,12 @@ export const waitTool = defineTool({
     "time to finish before checking again. Nothing happens and nothing is spent while waiting, " +
     "but the wait counts toward the run's time limit: if the run would end first, the wait is " +
     "shortened and you are told to wrap up.",
-  schema: z.object({
-    minutes: z
-      .number()
-      .positive()
-      .max(24 * 60)
-      .describe("How long to wait, e.g. 10 or 0.5."),
-    reason: z.string().max(200).optional().describe("What you are waiting for (shown in the log)."),
+  schema: s.object({
+    minutes: s.number({ gt: 0, max: 24 * 60 }).describe("How long to wait, e.g. 10 or 0.5."),
+    reason: s
+      .string({ max: 200 })
+      .optional()
+      .describe("What you are waiting for (shown in the log)."),
   }),
   async run(input, ctx) {
     const wanted = input.minutes * 60_000;

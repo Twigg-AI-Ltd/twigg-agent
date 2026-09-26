@@ -1,5 +1,5 @@
 import { readFile, stat } from "node:fs/promises";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath } from "../permissions/index.js";
 import { defineTool, fail, ok, recordRead } from "./util.js";
 
@@ -12,10 +12,16 @@ export const readTool = defineTool({
     "Read a text file. Returns lines prefixed with their 1-based line number. " +
     `Reads up to ${DEFAULT_LIMIT} lines by default; use offset/limit to page through large files. ` +
     "A file must be read before it can be edited.",
-  schema: z.object({
-    path: z.string().describe("File path, absolute or relative to the working directory."),
-    offset: z.number().int().min(1).optional().describe("1-based line to start at (default 1)."),
-    limit: z.number().int().min(1).optional().describe(`Max lines (default ${DEFAULT_LIMIT}).`),
+  schema: s.object({
+    path: s.string().describe("File path, absolute or relative to the working directory."),
+    offset: s
+      .number({ int: true, min: 1 })
+      .optional()
+      .describe("1-based line to start at (default 1)."),
+    limit: s
+      .number({ int: true, min: 1 })
+      .optional()
+      .describe(`Max lines (default ${DEFAULT_LIMIT}).`),
   }),
   async run(input, ctx) {
     const check = await checkPath(ctx, input.path, "read");

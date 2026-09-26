@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { blockedOutput, protectedReference } from "../permissions/index.js";
 import { defineTool, truncateMiddle } from "./util.js";
 
@@ -10,9 +10,12 @@ export const bashTool = defineTool({
   description:
     "Run a shell command with bash -c in the working directory. Returns combined stdout and " +
     "stderr (long output is truncated in the middle) and the exit code. Non-interactive: no stdin.",
-  schema: z.object({
-    command: z.string().min(1).describe("The command to run."),
-    timeout_ms: z.number().int().min(1).optional().describe("Timeout (capped by the tool limit)."),
+  schema: s.object({
+    command: s.string({ min: 1 }).describe("The command to run."),
+    timeout_ms: s
+      .number({ int: true, min: 1 })
+      .optional()
+      .describe("Timeout (capped by the tool limit)."),
   }),
   async run(input, ctx) {
     const timeoutMs = Math.min(input.timeout_ms ?? ctx.timeoutMs, ctx.timeoutMs);

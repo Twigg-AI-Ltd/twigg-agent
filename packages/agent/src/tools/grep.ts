@@ -1,5 +1,5 @@
 import { lstat, readFile } from "node:fs/promises";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath, isProtected } from "../permissions/index.js";
 import { listFiles, unsafePattern } from "./glob.js";
 import { defineTool, displayPath, fail, ok } from "./util.js";
@@ -13,14 +13,14 @@ export const grepTool = defineTool({
   description:
     "Search file contents with a JavaScript regular expression. Returns matching lines as " +
     `file:line: text (up to ${MAX_MATCHES}). Skips binary files, node_modules and .git.`,
-  schema: z.object({
-    pattern: z.string().min(1).describe("JavaScript regular expression (no slashes or flags)."),
-    path: z.string().optional().describe("File or directory to search (default: working dir)."),
-    glob: z
+  schema: s.object({
+    pattern: s.string({ min: 1 }).describe("JavaScript regular expression (no slashes or flags)."),
+    path: s.string().optional().describe("File or directory to search (default: working dir)."),
+    glob: s
       .string()
       .optional()
       .describe('Only search files matching this glob, e.g. "*.ts" or "src/**/*.js".'),
-    ignore_case: z.boolean().optional().describe("Case-insensitive match (default false)."),
+    ignore_case: s.boolean().optional().describe("Case-insensitive match (default false)."),
   }),
   async run(input, ctx) {
     let re: RegExp;

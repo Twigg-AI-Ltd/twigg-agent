@@ -1,6 +1,6 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath } from "../permissions/index.js";
 import { defineTool, ok, recordRead } from "./util.js";
 
@@ -9,9 +9,9 @@ export const writeTool = defineTool({
   description:
     "Write a file, replacing it if it exists. Creates parent directories as needed. " +
     "Prefer edit for changing part of an existing file.",
-  schema: z.object({
-    path: z.string().describe("File path, absolute or relative to the working directory."),
-    content: z.string().describe("Full file content."),
+  schema: s.object({
+    path: s.string().describe("File path, absolute or relative to the working directory."),
+    content: s.string().describe("Full file content."),
   }),
   async run(input, ctx) {
     const check = await checkPath(ctx, input.path, "write");

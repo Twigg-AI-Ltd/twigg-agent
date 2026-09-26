@@ -1,7 +1,7 @@
 import { stat } from "node:fs/promises";
 import { isAbsolute } from "node:path";
 import { glob } from "tinyglobby";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath, isProtected } from "../permissions/index.js";
 import { defineTool, displayPath, fail, IGNORED_DIRS, ok } from "./util.js";
 
@@ -30,9 +30,9 @@ export const globTool = defineTool({
   description:
     'Find files by glob pattern (e.g. "**/*.ts", "src/**/index.{js,ts}"). ' +
     `Ignores node_modules and .git. Returns up to ${MAX_RESULTS} paths, sorted.`,
-  schema: z.object({
-    pattern: z.string().min(1).describe("Glob pattern, relative to path."),
-    path: z.string().optional().describe("Directory to search (default: working directory)."),
+  schema: s.object({
+    pattern: s.string({ min: 1 }).describe("Glob pattern, relative to path."),
+    path: s.string().optional().describe("Directory to search (default: working directory)."),
   }),
   async run(input, ctx) {
     if (unsafePattern(input.pattern)) {

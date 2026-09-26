@@ -1,5 +1,5 @@
 import { readFile, stat, writeFile } from "node:fs/promises";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath } from "../permissions/index.js";
 import { defineTool, fail, lastRead, ok, recordRead } from "./util.js";
 
@@ -9,11 +9,11 @@ export const editTool = defineTool({
     "Replace an exact string in a file. old_string must match exactly (including whitespace) " +
     "and be unique in the file unless replace_all is true. The file must have been read with " +
     "read first, and not changed since.",
-  schema: z.object({
-    path: z.string().describe("File path, absolute or relative to the working directory."),
-    old_string: z.string().min(1).describe("Exact text to replace."),
-    new_string: z.string().describe("Replacement text."),
-    replace_all: z.boolean().optional().describe("Replace every occurrence (default false)."),
+  schema: s.object({
+    path: s.string().describe("File path, absolute or relative to the working directory."),
+    old_string: s.string({ min: 1 }).describe("Exact text to replace."),
+    new_string: s.string().describe("Replacement text."),
+    replace_all: s.boolean().optional().describe("Replace every occurrence (default false)."),
   }),
   async run(input, ctx) {
     const check = await checkPath(ctx, input.path, "write");

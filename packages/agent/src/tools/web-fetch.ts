@@ -1,5 +1,5 @@
 import TurndownService from "turndown";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { blockedOutput } from "../permissions/index.js";
 import { defineTool, fail, ok } from "./util.js";
 
@@ -17,8 +17,8 @@ export const webFetchTool = defineTool({
   description:
     "Fetch a URL over HTTP(S). HTML is converted to markdown; JSON and text are returned as-is. " +
     `Output is capped at ${MAX_CHARS} characters.`,
-  schema: z.object({
-    url: z.string().min(1).describe("http:// or https:// URL."),
+  schema: s.object({
+    url: s.string({ min: 1 }).describe("http:// or https:// URL."),
   }),
   async run(input, ctx) {
     if (!ctx.permissions.network) return blockedOutput(`fetch ${input.url}`);

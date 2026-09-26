@@ -7,7 +7,7 @@ import { mkdir, readFile, stat } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseEnv } from "node:util";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import type { JsonSchemaObject, Permissions, Tool, ToolOutput, ToolSource } from "../core/types.js";
 import { blockedOutput } from "../permissions/index.js";
 import { fail, ok, truncateMiddle } from "./util.js";
@@ -42,28 +42,33 @@ const BASE_ENV = ["PATH", "HOME", "USER", "LANG", "LC_ALL", "TZ", "TMPDIR", "SYS
 export const TOOL_PERMISSIONS = ["read", "write", "delete", "network"] as const;
 export type ToolPermission = (typeof TOOL_PERMISSIONS)[number];
 
-const ManifestSchema = z.strictObject({
-  name: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/, "must match ^[a-zA-Z0-9_-]{1,64}$"),
-  description: z.string().min(1),
-  input_schema: z.looseObject({ type: z.literal("object") }),
-  /** Program and arguments, run in the tool's folder. `node` means the harness's own Node. */
-  command: z.array(z.string().min(1)).min(1),
-  /** Environment variables the tool needs; it can't be used until all are set. */
-  env: z.array(z.string().min(1)).optional(),
-  /** What the tool does; it is left out of runs (and subagents) where any of these is denied. */
-  permissions: z.array(z.enum(TOOL_PERMISSIONS)).optional(),
-  /** Shorthand for `"permissions": ["network"]`. */
-  network: z.boolean().optional(),
-  /** How far Twigg should trust the output; use "untrusted" for outside content such as email. */
-  trust: z.enum(["trusted", "customer_data", "untrusted"]).optional(),
-  /** The folder has a package.json whose dependencies must be installed (`npm install`). */
-  needs_npm_install: z.boolean().optional(),
-});
+const text = s.string({ min: 1 });
+
+const ManifestSchema = s.object(
+  {
+    name: s.string({ pattern: /^[a-zA-Z0-9_-]{1,64}$/ }),
+    description: text,
+    input_schema: s.object({ type: s.oneOf(["object"]) }, "keep"),
+    /** Program and arguments, run in the tool's folder. `node` means the harness's own Node. */
+    command: s.array(text, { min: 1 }),
+    /** Environment variables the tool needs; it can't be used until all are set. */
+    env: s.array(text).optional(),
+    /** What the tool does; it is left out of runs (and subagents) where any of these is denied. */
+    permissions: s.array(s.oneOf(TOOL_PERMISSIONS)).optional(),
+    /** Shorthand for `"permissions": ["network"]`. */
+    network: s.boolean().optional(),
+    /** How far Twigg should trust the output; use "untrusted" for outside content such as email. */
+    trust: s.oneOf(["trusted", "customer_data", "untrusted"]).optional(),
+    /** The folder has a package.json whose dependencies must be installed (`npm install`). */
+    needs_npm_install: s.boolean().optional(),
+  },
+  "strict",
+);
 
 /** tool.json holds one manifest, or an array of them sharing the folder's code and state. */
-const ManifestFileSchema = z.union([ManifestSchema, z.array(ManifestSchema).min(1)]);
+const ManifestFileSchema = s.union(ManifestSchema, s.array(ManifestSchema, { min: 1 }));
 
-export type Manifest = z.output<typeof ManifestSchema>;
+export type Manifest = s.Infer<typeof ManifestSchema>;
 
 export interface CustomTool extends Tool {
   dir: string;
@@ -147,14 +152,12 @@ async function loadSource(source: ToolSource, env: NodeJS.ProcessEnv): Promise<C
   } catch (e) {
     return bad(`tool.json: invalid JSON: ${(e as Error).message}`);
   }
-  const parsed = ManifestFileSchema.safeParse(data);
-  if (!parsed.success) {
-    // Report against the single-manifest shape, whose messages name the field.
-    const one = Array.isArray(data) ? undefined : ManifestSchema.safeParse(data).error;
-    const issue = (one ?? parsed.error).issues[0];
-    return bad(`tool.json: ${issue?.path.join(".") || "(root)"}: ${issue?.message ?? "invalid"}`);
+  const parsed = ManifestFileSchema.parse(data);
+  if (!parsed.ok) {
+    const issue = parsed.issues[0];
+    return bad(`tool.json: ${issue?.path || "(root)"}: ${issue?.message ?? "invalid"}`);
   }
-  const manifests = Array.isArray(parsed.data) ? parsed.data : [parsed.data];
+  const manifests = Array.isArray(parsed.value) ? parsed.value : [parsed.value];
 
   let dotenv: Record<string, string> = {};
   try {
