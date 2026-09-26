@@ -31,7 +31,8 @@ harness: it runs the agent loop and the tools on your machine.
 | Download | 240 KB |
 | Runtime dependencies | none |
 
-Measured for v0.1.0. Needs Node 22.13 or later.
+That's about 1 MB installed, where full coding-agent CLIs are typically 100–400 MB. Measured for
+v0.1.0; needs Node 22.13 or later.
 
 ## Install
 
