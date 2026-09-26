@@ -2,7 +2,7 @@
 
 A tool is a folder with a `tool.json` and a program. The program can be in any language: the
 harness sends the model's arguments as JSON on stdin and gives the model whatever the program
-prints. Nothing is imported into the harness, so a broken tool can't break a run.
+prints. Nothing gets imported into the harness, so a broken tool can't break a run.
 
 ```
 my-tool/
@@ -30,7 +30,7 @@ List tools in a settings file, or add them with `--tool` (repeatable):
 - **Paths** start with `.`, `/` or `~`.
 - Tools can't be added from an instructions file's frontmatter.
 - If a listed tool can't be used, the run stops before it starts. `twigg-agent tools` shows each
-  tool and what, if anything, is missing.
+  tool and what is missing.
 
 ## tool.json
 
