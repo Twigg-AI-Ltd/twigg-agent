@@ -30,12 +30,8 @@ harness: it runs the agent loop and the tools on your machine.
 | Installed size | 920 KB, one file |
 | Download | 240 KB |
 | Runtime dependencies | none |
-| Startup | under 0.1 s |
-| Lines of code | about 3,200 for the CLI, 290 for the database tool |
-| Tests | 260 |
 
-Measured for v0.1.0. Lines of code leave out blank lines, comments, tests and the API types
-generated from Twigg's OpenAPI spec.
+Measured for v0.1.0. Needs Node 22.13 or later.
 
 ## Install
 
