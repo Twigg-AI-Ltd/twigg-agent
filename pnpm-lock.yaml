@@ -187,9 +187,6 @@ importers:
       picomatch:
         specifier: ^4.0.7
         version: 4.0.7
-      tinyglobby:
-        specifier: ^0.2.17
-        version: 0.2.17
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.28)(typescript@7.0.2)(yaml@2.9.1)

@@ -1,4 +1,4 @@
-import { mkdir, readFile, stat, utimes, writeFile } from "node:fs/promises";
+import { mkdir, readFile, stat, symlink, utimes, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { deleteTool } from "../../src/tools/delete.js";
@@ -145,6 +145,47 @@ describe("glob and grep", () => {
     expect((await grepTool.run({ pattern: "(" }, ctx)).text).toContain(
       "Invalid regular expression",
     );
+  });
+
+  it("glob takes a folder, a fixed path and patterns of limited depth", async () => {
+    const { ctx } = await setup();
+    const list = async (pattern: string) => (await globTool.run({ pattern }, ctx)).text.split("\n");
+    const all = ["src/a.ts", "src/bin.dat", "src/c.md", "src/sub/b.ts"];
+    expect(await list("src")).toEqual(all);
+    expect(await list("src/")).toEqual(all);
+    expect(await list("src/**")).toEqual(all);
+    expect(await list("src/*.ts")).toEqual(["src/a.ts"]);
+    expect(await list("*/*/*.ts")).toEqual(["src/sub/b.ts"]);
+    expect(await list("src/sub/b.ts")).toEqual(["src/sub/b.ts"]);
+    expect(await list("{src,lib}/**/*.{ts,md}")).toEqual(["src/a.ts", "src/c.md", "src/sub/b.ts"]);
+    expect(await list("node_modules/**")).toEqual(["No files matched."]);
+    expect(await list("missing/**")).toEqual(["No files matched."]);
+  });
+
+  it("glob and grep never go through symlinks", async () => {
+    const { dir, ctx } = await setup();
+    const outside = await tempDir();
+    await writeFile(join(outside, "secret.ts"), "foo outside\n");
+    await symlink(outside, join(dir, "link"));
+    await symlink(outside, join(dir, "src/link"));
+    await symlink(join(outside, "secret.ts"), join(dir, "src/file-link.ts"));
+    for (const pattern of [
+      "**/*.ts",
+      "link/*",
+      "link/**",
+      "link",
+      "src/link/*.ts",
+      "**/secret.ts",
+    ]) {
+      expect((await globTool.run({ pattern }, ctx)).text).not.toContain("secret");
+      expect((await grepTool.run({ pattern: "foo", glob: pattern }, ctx)).text).not.toContain(
+        "outside",
+      );
+    }
+    expect((await globTool.run({ pattern: "**/*.ts" }, ctx)).text.split("\n")).toEqual([
+      "src/a.ts",
+      "src/sub/b.ts",
+    ]);
   });
 
   it("grep and glob block paths outside root", async () => {

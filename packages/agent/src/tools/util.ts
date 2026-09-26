@@ -64,4 +64,5 @@ export function lastRead(agentId: string, path: string) {
   return readState.get(agentId)?.get(path);
 }
 
-export const IGNORED_DIRS = ["**/node_modules/**", "**/.git/**"];
+/** Folders that glob and grep never look into. */
+export const IGNORED_DIRS = ["node_modules", ".git"];
