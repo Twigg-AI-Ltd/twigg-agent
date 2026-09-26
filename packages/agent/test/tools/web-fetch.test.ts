@@ -39,7 +39,7 @@ describe("web_fetch", () => {
     const out = await webFetchTool.run({ url: `${base}/page` }, ctx());
     expect(out.isError).toBe(false);
     expect(out.text).toContain("# Title");
-    expect(out.text).toContain("Hello [link](/x)");
+    expect(out.text).toContain(`Hello [link](${base}/x)`);
     expect(out.text).not.toContain("alert");
     expect(out.text).not.toContain("body{}");
   });

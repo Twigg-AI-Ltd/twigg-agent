@@ -1,16 +1,10 @@
-import TurndownService from "turndown";
 import * as s from "../core/schema.js";
 import { blockedOutput } from "../permissions/index.js";
+import { htmlToMarkdown } from "./html.js";
 import { defineTool, fail, ok } from "./util.js";
 
 const MAX_CHARS = 50_000;
 const TEXT_TYPES = /^(text\/|application\/(json|xml|javascript|[\w.+-]+\+(json|xml)))/;
-
-function htmlToMarkdown(html: string): string {
-  const td = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced" });
-  td.remove(["script", "style", "noscript"]);
-  return td.turndown(html);
-}
 
 export const webFetchTool = defineTool({
   name: "web_fetch",
@@ -48,7 +42,7 @@ export const webFetchTool = defineTool({
     }
 
     const body = await res.text();
-    let text = type.includes("html") ? htmlToMarkdown(body) : body;
+    let text = type.includes("html") ? htmlToMarkdown(body, res.url || url.href) : body;
     if (text.length > MAX_CHARS) {
       text = `${text.slice(0, MAX_CHARS)}\n\n[Truncated: ${text.length - MAX_CHARS} more characters.]`;
     }

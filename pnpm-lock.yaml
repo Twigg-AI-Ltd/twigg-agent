@@ -175,9 +175,6 @@ importers:
       '@types/picomatch':
         specifier: ^4.0.3
         version: 4.0.3
-      '@types/turndown':
-        specifier: ^5.0.6
-        version: 5.0.6
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -196,9 +193,6 @@ importers:
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.28)(typescript@7.0.2)(yaml@2.9.1)
-      turndown:
-        specifier: ^7.2.4
-        version: 7.2.4
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
@@ -432,9 +426,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
-
-  '@mixmark-io/domino@2.2.0':
-    resolution: {integrity: sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw==}
 
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     resolution: {integrity: sha512-oTXEIha4SsuXdTA4Iyskj0kpdx2yVXdhd75c2v3xGrHFfVMsbhTPZU/nMPL4sWKo4pBHm3aucLaqGlF696dTyQ==}
@@ -697,9 +688,6 @@ packages:
 
   '@types/picomatch@4.0.3':
     resolution: {integrity: sha512-iG0T6+nYJ9FAPmx9SsUlnwcq1ZVRuCXcVEvWnntoPlrOpwtSTKNDC9uVAxTsC3PUvJ+99n4RpAcNgBbHX3JSnQ==}
-
-  '@types/turndown@5.0.6':
-    resolution: {integrity: sha512-ru00MoyeeouE5BX4gRL+6m/BsDfbRayOskWqUvh7CLGW+UXxHQItqALa38kKnOiZPqJrtzJUgAC2+F0rL1S4Pg==}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
@@ -1159,10 +1147,6 @@ packages:
       typescript:
         optional: true
 
-  turndown@7.2.4:
-    resolution: {integrity: sha512-I8yFsfRzmzK0WV1pNNOA4A7y4RDfFxPRxb3t+e3ui14qSGOxGtiSP6GjeX+Y6CHb7HYaFj7ECUD7VE5kQMZWGQ==}
-    engines: {node: '>=18', npm: '>=9'}
-
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
     engines: {node: '>=16.20.0'}
@@ -1397,8 +1381,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@mixmark-io/domino@2.2.0': {}
-
   '@napi-rs/lzma-linux-x64-gnu@1.5.1':
     optional: true
 
@@ -1540,8 +1522,6 @@ snapshots:
       undici-types: 6.21.0
 
   '@types/picomatch@4.0.3': {}
-
-  '@types/turndown@5.0.6': {}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
@@ -1931,10 +1911,6 @@ snapshots:
       - supports-color
       - tsx
       - yaml
-
-  turndown@7.2.4:
-    dependencies:
-      '@mixmark-io/domino': 2.2.0
 
   typescript@7.0.2:
     optionalDependencies:

@@ -39,7 +39,6 @@
     "picomatch": "^4.0.7",
     "tinyglobby": "^0.2.17",
     "tsup": "^8.5.1",
-    "turndown": "^7.2.4",
     "yaml": "^2.9.1"
   }
 }
