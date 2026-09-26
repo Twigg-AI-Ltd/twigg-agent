@@ -35,14 +35,12 @@
     "gen:api": "pnpm dlx --package openapi-typescript@7 --package typescript@5 openapi-typescript https://api.twigg.ai/openapi.json --empty-objects-unknown -o src/api/schema.d.ts",
     "prepack": "tsup"
   },
-  "dependencies": {
+  "devDependencies": {
     "picomatch": "^4.0.7",
     "tinyglobby": "^0.2.17",
+    "tsup": "^8.5.1",
     "turndown": "^7.2.4",
     "yaml": "^2.9.1",
     "zod": "^4.6.5"
-  },
-  "devDependencies": {
-    "tsup": "^8.5.1"
   }
 }

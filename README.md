@@ -1,12 +1,14 @@
 # twigg-agent
 
-A one-shot, non-interactive agent for the command line. Give it a Markdown file of instructions and
-it works through them with tools. It and exits with `success`, `failed` or `needs_clarification`. It
-never stops to ask questions, so it fits cron jobs, CI and scripts.
+An ultra-lightweight, one-shot agent for the command line. Give it a Markdown file of instructions
+and it works through them with tools, then exits with `success`, `failed` or
+`needs_clarification`. It never stops to ask questions, so it fits cron jobs, CI and scripts.
 
-It runs on the [Twigg](https://twigg.ai) API, which manages the context.
-the twigg-agent is purely a harness runs the agent loop and the tools on your machine.
+It runs on the [Twigg](https://twigg.ai) API, which manages the context. twigg-agent is purely a
+harness: it runs the agent loop and the tools on your machine.
 
+- **Ultra lightweight:** a single file of under 1 MB with no dependencies, a 240 KB download,
+  starting in under 0.1 s.
 - **Built-in tools:** read, write, edit, delete, glob, grep, web_fetch, todo, wait, parallel
   subagents, and bash if you enable it.
 - **Your own tools, in any language:** a folder with a `tool.json` and a program that reads JSON

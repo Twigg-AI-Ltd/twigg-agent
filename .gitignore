@@ -14,3 +14,7 @@ coverage/
 # Local agent context
 CLAUDE.local.md
 .claude/
+
+# Editor swap files
+*.swp
+*.swo
