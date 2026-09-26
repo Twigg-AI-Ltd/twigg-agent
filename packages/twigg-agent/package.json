@@ -1,0 +1,28 @@
+{
+  "name": "twigg-agent",
+  "version": "0.1.0",
+  "description": "Alias for @twigg/agent, so `npx twigg-agent` works",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "twigg-agent": "./cli.js"
+  },
+  "files": [
+    "cli.js"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Twigg-AI-Ltd/twigg-agent.git",
+    "directory": "packages/twigg-agent"
+  },
+  "homepage": "https://github.com/Twigg-AI-Ltd/twigg-agent#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@twigg/agent": "0.1.0"
+  }
+}

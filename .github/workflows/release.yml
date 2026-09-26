@@ -37,10 +37,16 @@ jobs:
               exit 1
             fi
           done
+          pinned=$(node -p "require('./packages/twigg-agent/package.json').dependencies['@twigg/agent']")
+          if [ "$pinned" != "$tag" ]; then
+            echo "::error::twigg-agent depends on @twigg/agent $pinned but the tag is $GITHUB_REF_NAME"
+            exit 1
+          fi
 
+      # In dependency order: the twigg-agent alias needs @twigg/agent published first.
       - name: Publish
         run: |
-          for dir in packages/*/; do
+          for dir in packages/agent/ packages/tool-database/ packages/twigg-agent/; do
             name=$(node -p "require('./${dir}package.json').name")
             version=$(node -p "require('./${dir}package.json').version")
             if npm view "$name@$version" version >/dev/null 2>&1; then
