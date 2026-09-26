@@ -2,9 +2,10 @@
 
 All packages share one version number and are released together from a git tag.
 
-1. On a branch, set the new version in every `packages/*/package.json`:
+1. On a branch, set the new version on every package (this also points the `twigg-agent` alias
+   at the same `@twigg/agent`):
    ```sh
-   pnpm -r exec npm version 0.2.0 --no-git-tag-version
+   node scripts/set-version.mjs 0.2.0
    ```
 2. Open a pull request, and merge it once CI passes.
 3. Tag the merge commit on `main` and push the tag:

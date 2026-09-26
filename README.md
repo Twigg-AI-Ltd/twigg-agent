@@ -151,8 +151,9 @@ twigg-agent tools --tool @twigg/agent-database   # check a tool is ready
 
 ## Development
 
-This repo is a pnpm workspace: [`packages/agent`](packages/agent) is the CLI and
-[`packages/tool-database`](packages/tool-database) the database tool.
+This repo is a pnpm workspace: [`packages/agent`](packages/agent) is the CLI,
+[`packages/tool-database`](packages/tool-database) the database tool, and
+[`packages/twigg-agent`](packages/twigg-agent) an alias so `npx twigg-agent` works.
 
 ```sh
 corepack enable

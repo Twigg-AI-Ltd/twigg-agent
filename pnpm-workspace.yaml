@@ -1,5 +1,7 @@
 packages:
   - packages/*
+  # The twigg-agent alias depends on the published @twigg/agent and has nothing to build or test.
+  - '!packages/twigg-agent'
 
 allowBuilds:
   esbuild: true
