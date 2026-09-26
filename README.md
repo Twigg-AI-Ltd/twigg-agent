@@ -11,13 +11,15 @@
             a   g   e   n   t                       |
 ```
 
-A one-shot, non-interactive agent for the command line. Give it a Markdown file of instructions and
-it works through them with tools. It and exits with `success`, `failed` or `needs_clarification`. It
-never stops to ask questions, so it fits cron jobs, CI and scripts.
+An ultra-lightweight, one-shot agent for the command line. Give it a Markdown file of instructions
+and it works through them with tools, then exits with `success`, `failed` or
+`needs_clarification`. It never stops to ask questions, so it fits cron jobs, CI and scripts.
 
-It runs on the [Twigg](https://twigg.ai) API, which manages the context.
-the twigg-agent is purely a harness runs the agent loop and the tools on your machine.
+It runs on the [Twigg](https://twigg.ai) API, which manages the context. twigg-agent is purely a
+harness: it runs the agent loop and the tools on your machine.
 
+- **Ultra lightweight:** a single file of under 1 MB with no dependencies, a 240 KB download,
+  starting in under 0.1 s. See [At a glance](#at-a-glance).
 - **Built-in tools:** read, write, edit, delete, glob, grep, web_fetch, todo, wait, parallel
   subagents, and bash if you enable it.
 - **Your own tools, in any language:** a folder with a `tool.json` and a program that reads JSON
@@ -31,6 +33,17 @@ the twigg-agent is purely a harness runs the agent loop and the tools on your ma
 > restriction. You can enable it with `--allow-bash` (or `"permissions": { "bash": true }` in a
 > settings file), but we recommend running the agent in a VM, container or other safe environment
 > if you do. See [Enabling bash](#enabling-bash).
+
+## At a glance
+
+| | |
+| --- | --- |
+| Installed size | 920 KB, one file |
+| Download | 240 KB |
+| Runtime dependencies | none |
+
+That's about 1 MB installed, where full coding-agent CLIs are typically 100–400 MB. Measured for
+v0.1.0; needs Node 22.13 or later.
 
 ## Install
 
