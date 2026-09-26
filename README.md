@@ -61,7 +61,9 @@ twigg-agent task.md --model claude-sonnet-5 --max-cost 1 --output result.json
 ```
 
 `task.md` is a plain Markdown file. It may start with YAML frontmatter using the same keys as a settings
-file; frontmatter can only tighten permissions and limits, never loosen them.
+file; frontmatter can only tighten permissions and limits, never loosen them. Frontmatter is read
+as plain YAML: mappings, lists and single-line values. Anchors, tags and multi-line strings are
+reported as errors.
 
 ```markdown
 ---

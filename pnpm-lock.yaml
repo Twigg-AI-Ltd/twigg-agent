@@ -193,9 +193,6 @@ importers:
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.28)(typescript@7.0.2)(yaml@2.9.1)
-      yaml:
-        specifier: ^2.9.1
-        version: 2.9.1
 
   packages/tool-database: {}
 
@@ -1975,4 +1972,5 @@ snapshots:
 
   why-is-node-running@3.2.2: {}
 
-  yaml@2.9.1: {}
+  yaml@2.9.1:
+    optional: true
