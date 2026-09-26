@@ -8,7 +8,7 @@ It runs on the [Twigg](https://twigg.ai) API, which manages the context. twigg-a
 harness: it runs the agent loop and the tools on your machine.
 
 - **Ultra lightweight:** a single file of under 1 MB with no dependencies, a 240 KB download,
-  starting in under 0.1 s.
+  starting in under 0.1 s. See [At a glance](#at-a-glance).
 - **Built-in tools:** read, write, edit, delete, glob, grep, web_fetch, todo, wait, parallel
   subagents, and bash if you enable it.
 - **Your own tools, in any language:** a folder with a `tool.json` and a program that reads JSON
@@ -22,6 +22,20 @@ harness: it runs the agent loop and the tools on your machine.
 > restriction. You can enable it with `--allow-bash` (or `"permissions": { "bash": true }` in a
 > settings file), but we recommend running the agent in a VM, container or other safe environment
 > if you do. See [Enabling bash](#enabling-bash).
+
+## At a glance
+
+| | |
+| --- | --- |
+| Installed size | 920 KB, one file |
+| Download | 240 KB |
+| Runtime dependencies | none |
+| Startup | under 0.1 s |
+| Lines of code | about 3,200 for the CLI, 290 for the database tool |
+| Tests | 260 |
+
+Measured for v0.1.0. Lines of code leave out blank lines, comments, tests and the API types
+generated from Twigg's OpenAPI spec.
 
 ## Install
 
