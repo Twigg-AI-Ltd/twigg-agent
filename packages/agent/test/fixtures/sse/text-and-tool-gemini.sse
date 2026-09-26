@@ -1,0 +1,39 @@
+event: run
+data: {"chat_id":"01a0d4e4-6e01-7891-ab97-cc32ddde17eb","closed_tool_calls":[],"run_id":"01a0d4e4-6e79-72a1-8d6a-efafc675a05f"}
+
+event: config_warnings
+data: {"warnings":[]}
+
+event: translation_warnings
+data: {"warnings":[]}
+
+event: block_start
+data: {"kind":"text"}
+
+event: delta
+data: {"kind":"text","text":"I will write"}
+
+event: delta
+data: {"kind":"text","text":" the letter 'x' to the file named 'b.txt'.\n\n"}
+
+event: block_stop
+data: {}
+
+event: block_start
+data: {"kind":"tool_call","tool_name":"write_file","tool_use_id":"call_2805269"}
+
+event: delta
+data: {"kind":"tool_input","text":"{\"content\": \"x\",\"path\": \"b.txt\"}"}
+
+event: block_stop
+data: {}
+
+event: block_start
+data: {"kind":"text"}
+
+event: block_stop
+data: {}
+
+event: done
+data: {"compaction":null,"cost":"0.00030660","cost_currency":"USD","model_served":"gemini-3.1-flash-lite","pending_tool_calls":[{"tool_name":"write_file","tool_use_id":"call_2805269"}],"provider_response_id":"93m1atOJMo3y1dkPyL3y8Ag","server_tools":null,"stop_reason":"tool_use","usage":{"cache_read_tokens":0,"cache_write_tokens":0,"input_tokens":52,"output_tokens":186,"reasoning_tokens":144}}
+

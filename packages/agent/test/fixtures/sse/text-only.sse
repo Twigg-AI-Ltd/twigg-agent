@@ -1,0 +1,45 @@
+event: run
+data: {"chat_id":"01a0d4e4-56f8-7c93-bb06-32cea8135c70","closed_tool_calls":[],"run_id":"01a0d4e4-5799-7611-8ff8-9e080cf74d18"}
+
+event: config_warnings
+data: {"warnings":[]}
+
+event: translation_warnings
+data: {"warnings":[]}
+
+event: block_start
+data: {"kind":"reasoning"}
+
+event: block_stop
+data: {}
+
+event: block_start
+data: {"kind":"text"}
+
+event: delta
+data: {"kind":"text","text":"Hello"}
+
+event: delta
+data: {"kind":"text","text":" there"}
+
+event: delta
+data: {"kind":"text","text":","}
+
+event: delta
+data: {"kind":"text","text":" how"}
+
+event: delta
+data: {"kind":"text","text":" are"}
+
+event: delta
+data: {"kind":"text","text":" you"}
+
+event: delta
+data: {"kind":"text","text":"?"}
+
+event: block_stop
+data: {}
+
+event: done
+data: {"compaction":null,"cost":"0.00003696","cost_currency":"USD","model_served":"gpt-6-luna","pending_tool_calls":[],"provider_response_id":"resp_06edc4cb1d32963c016ab579f23a5c87d1a1bb5236b9db0d8a","server_tools":null,"stop_reason":"end_turn","usage":{"cache_read_tokens":0,"cache_write_tokens":0,"input_tokens":12,"output_tokens":68,"reasoning_tokens":55}}
+

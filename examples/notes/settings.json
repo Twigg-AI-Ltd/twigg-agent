@@ -1,0 +1,7 @@
+{
+  "model": "claude-sonnet-5",
+  "namespace": "examples/notes",
+  "tools": ["@twigg/agent-database", "../tools/word-count"],
+  "permissions": { "network": false },
+  "limits": { "maxCostUsd": 0.5, "maxTurns": 30, "timeout": "10m" }
+}

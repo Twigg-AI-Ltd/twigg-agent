@@ -1,0 +1,48 @@
+event: run
+data: {"chat_id":"01a0d4e4-75db-7932-9f88-7d8b584bbe95","closed_tool_calls":[],"run_id":"01a0d4e4-7654-7421-8850-e833c8a8a75d"}
+
+event: config_warnings
+data: {"warnings":[]}
+
+event: translation_warnings
+data: {"warnings":[]}
+
+event: block_start
+data: {"kind":"text"}
+
+event: delta
+data: {"kind":"text","text":"42"}
+
+event: block_stop
+data: {}
+
+event: block_start
+data: {"kind":"tool_call","tool_name":"write_file","tool_use_id":"toolu_01P7n74ykc7MxDkiphRTcQon"}
+
+event: delta
+data: {"kind":"tool_input","text":""}
+
+event: delta
+data: {"kind":"tool_input","text":"{\"path\""}
+
+event: delta
+data: {"kind":"tool_input","text":": \"c.tx"}
+
+event: delta
+data: {"kind":"tool_input","text":"t\""}
+
+event: delta
+data: {"kind":"tool_input","text":", \"cont"}
+
+event: delta
+data: {"kind":"tool_input","text":"ent\": \""}
+
+event: delta
+data: {"kind":"tool_input","text":"42\"}"}
+
+event: block_stop
+data: {}
+
+event: done
+data: {"compaction":null,"cost":"0.00173880","cost_currency":"USD","model_served":"claude-sonnet-5","pending_tool_calls":[{"tool_name":"write_file","tool_use_id":"toolu_01P7n74ykc7MxDkiphRTcQon"}],"provider_response_id":"msg_011CfNpMu4aYiTX2NReCMqeG","server_tools":null,"stop_reason":"tool_use","usage":{"cache_read_tokens":0,"cache_write_tokens":0,"input_tokens":463,"output_tokens":73,"reasoning_tokens":0}}
+

@@ -1,0 +1,11 @@
+{
+  "name": "word_count",
+  "description": "Count the lines, words and characters of a text. Returns JSON.",
+  "input_schema": {
+    "type": "object",
+    "properties": { "text": { "type": "string", "description": "The text to count." } },
+    "required": ["text"],
+    "additionalProperties": false
+  },
+  "command": ["python3", "count.py"]
+}

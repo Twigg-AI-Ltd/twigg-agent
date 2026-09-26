@@ -1,0 +1,151 @@
+[
+  {
+    "name": "db_collections",
+    "description": "List the database's collections with their record counts and last update time. The database persists between runs.",
+    "input_schema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "command": ["node", "db.js", "collections"],
+    "permissions": ["read"]
+  },
+  {
+    "name": "db_find",
+    "description": "Find records in a collection. Filter with `where` on any field (dot paths reach nested fields; id, created_at and updated_at are built in), sort with `order_by`, and page with `limit`/`offset`. Returns the total match count and the page of records.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "collection": {
+          "type": "string",
+          "description": "Collection name, e.g. \"leads\"."
+        },
+        "where": {
+          "type": "object",
+          "additionalProperties": {
+            "description": "A value (equals) or an object of operators: eq, ne, in, nin, lt, lte, gt, gte, exists (true/false), contains (case-insensitive substring)."
+          },
+          "description": "Field conditions, all of which must match. Example: {\"status\": {\"in\": [\"new\", \"sent\"]}, \"last_sent_at\": {\"lt\": \"2026-09-25\"}}."
+        },
+        "order_by": {
+          "type": "string",
+          "description": "Field to sort by (default: created_at)."
+        },
+        "desc": {
+          "type": "boolean",
+          "description": "Sort descending."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200,
+          "description": "Page size (default 50)."
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Records to skip."
+        }
+      },
+      "required": ["collection"],
+      "additionalProperties": false
+    },
+    "command": ["node", "db.js", "find"],
+    "permissions": ["read"]
+  },
+  {
+    "name": "db_get",
+    "description": "Get records by id from a collection. Reports ids that don't exist.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "collection": {
+          "type": "string"
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 200
+        }
+      },
+      "required": ["collection", "ids"],
+      "additionalProperties": false
+    },
+    "command": ["node", "db.js", "get"],
+    "permissions": ["read"]
+  },
+  {
+    "name": "db_upsert",
+    "description": "Create or update up to 100 records in one call; all changes apply or none do. For each record: `set` merges fields (a new record is created if the id is new), `unset` removes fields, and `append` adds a value to the end of a list field (created if missing), e.g. to add a comment to a history. Values can be any JSON. Use stable ids that identify the thing itself (an email address, a URL, an external id), so records are not duplicated.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "collection": {
+          "type": "string",
+          "description": "Collection name: lowercase letters, digits and _."
+        },
+        "records": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "set": {
+                "type": "object",
+                "description": "Fields to set."
+              },
+              "unset": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Fields to remove."
+              },
+              "append": {
+                "type": "object",
+                "description": "field -> value to append to that list field."
+              }
+            },
+            "required": ["id"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["collection", "records"],
+      "additionalProperties": false
+    },
+    "command": ["node", "db.js", "upsert"],
+    "permissions": ["write"]
+  },
+  {
+    "name": "db_delete",
+    "description": "Delete records by id. Prefer updating a status field over deleting, so history is kept.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "collection": {
+          "type": "string"
+        },
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "maxItems": 200
+        }
+      },
+      "required": ["collection", "ids"],
+      "additionalProperties": false
+    },
+    "command": ["node", "db.js", "delete"],
+    "permissions": ["delete"]
+  }
+]

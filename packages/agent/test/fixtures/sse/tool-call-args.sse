@@ -1,0 +1,54 @@
+event: run
+data: {"chat_id":"01a0d4e4-619e-7a00-8ba7-f0213f541166","closed_tool_calls":[],"run_id":"01a0d4e4-6220-7861-8f04-b6f76f4d5bff"}
+
+event: config_warnings
+data: {"warnings":[]}
+
+event: translation_warnings
+data: {"warnings":[]}
+
+event: block_start
+data: {"kind":"tool_call","tool_name":"write_file","tool_use_id":"call_24q560NSA4Nt1eeDAW45bMw4"}
+
+event: delta
+data: {"kind":"tool_input","text":"{\""}
+
+event: delta
+data: {"kind":"tool_input","text":"content"}
+
+event: delta
+data: {"kind":"tool_input","text":"\":\""}
+
+event: delta
+data: {"kind":"tool_input","text":"hi"}
+
+event: delta
+data: {"kind":"tool_input","text":" there"}
+
+event: delta
+data: {"kind":"tool_input","text":"\",\""}
+
+event: delta
+data: {"kind":"tool_input","text":"path"}
+
+event: delta
+data: {"kind":"tool_input","text":"\":\""}
+
+event: delta
+data: {"kind":"tool_input","text":"notes"}
+
+event: delta
+data: {"kind":"tool_input","text":"/a"}
+
+event: delta
+data: {"kind":"tool_input","text":".txt"}
+
+event: delta
+data: {"kind":"tool_input","text":"\"}"}
+
+event: block_stop
+data: {}
+
+event: done
+data: {"compaction":null,"cost":"0.00001974","cost_currency":"USD","model_served":"gpt-6-luna","pending_tool_calls":[{"tool_name":"write_file","tool_use_id":"call_24q560NSA4Nt1eeDAW45bMw4"}],"provider_response_id":"resp_0808f8f1a34b8211016ab579f4c21c87d1a077aab5a260c68e","server_tools":null,"stop_reason":"tool_use","usage":{"cache_read_tokens":0,"cache_write_tokens":0,"input_tokens":63,"output_tokens":25,"reasoning_tokens":0}}
+

@@ -1,0 +1,33 @@
+{
+  "name": "@twigg/agent-database",
+  "version": "0.1.0",
+  "description": "A persistent JSON document store (SQLite) for twigg-agent: collections of records the agent can find, get, upsert and delete",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "twigg-agent-db": "./db.js"
+  },
+  "files": [
+    "tool.json",
+    "db.js",
+    "store.js",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Twigg-AI-Ltd/twigg-agent.git",
+    "directory": "packages/tool-database"
+  },
+  "keywords": [
+    "twigg-agent",
+    "twigg-agent-tool",
+    "database",
+    "sqlite"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

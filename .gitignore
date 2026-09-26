@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+*.log
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Tool state written by twigg-agent runs
+.twigg-agent/
+
+# Local agent context
+CLAUDE.local.md
+.claude/
