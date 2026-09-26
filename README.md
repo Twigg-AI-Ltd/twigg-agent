@@ -1,5 +1,16 @@
 # twigg-agent
 
+```text
+                                                (@) | (@)
+████████╗██╗    ██╗██╗ ██████╗  ██████╗          \  |  /
+╚══██╔══╝██║    ██║██║██╔════╝ ██╔════╝     (@)   \ | /   (@)
+   ██║   ██║ █╗ ██║██║██║  ███╗██║  ███╗     \_____\|/_____/
+   ██║   ██║███╗██║██║██║   ██║██║   ██║            |
+   ██║   ╚███╔███╔╝██║╚██████╔╝╚██████╔╝            |
+   ╚═╝    ╚══╝╚══╝ ╚═╝ ╚═════╝  ╚═════╝             |
+            a   g   e   n   t                       |
+```
+
 A one-shot, non-interactive agent for the command line. Give it a Markdown file of instructions and
 it works through them with tools. It and exits with `success`, `failed` or `needs_clarification`. It
 never stops to ask questions, so it fits cron jobs, CI and scripts.
