@@ -163,6 +163,7 @@ node packages/agent/dist/cli.js --help
 ```
 
 `pnpm --filter @twigg/agent gen:api` regenerates the API types from Twigg's OpenAPI spec.
+Releases are published from git tags; see [Releasing](docs/releasing.md).
 
 ## License
 

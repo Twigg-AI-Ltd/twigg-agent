@@ -1,0 +1,51 @@
+name: Release
+
+# Publishes every package whose version isn't on npm yet, when a v* tag is pushed. Uses npm
+# trusted publishing (OIDC), so no npm token is stored anywhere; see docs/releasing.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+
+      - name: Check the tag matches the package versions
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          for pkg in packages/*/package.json; do
+            version=$(node -p "require('./$pkg').version")
+            if [ "$version" != "$tag" ]; then
+              echo "::error::$pkg is version $version but the tag is $GITHUB_REF_NAME"
+              exit 1
+            fi
+          done
+
+      - name: Publish
+        run: |
+          for dir in packages/*/; do
+            name=$(node -p "require('./${dir}package.json').name")
+            version=$(node -p "require('./${dir}package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "$name@$version is already on npm, skipping"
+              continue
+            fi
+            (cd "$dir" && npm publish --access public --provenance)
+          done
