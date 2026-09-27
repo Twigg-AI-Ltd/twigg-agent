@@ -1,6 +1,6 @@
 {
   "name": "twigg-agent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Alias for @twigg/agent, so `npx twigg-agent` works",
   "license": "MIT",
   "type": "module",
@@ -23,6 +23,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@twigg/agent": "0.1.0"
+    "@twigg/agent": "0.2.0"
   }
 }
