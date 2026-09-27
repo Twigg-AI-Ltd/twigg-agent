@@ -13,6 +13,7 @@ export { ConfigError, parseDuration } from "./schema.js";
 
 export type LoadConfigResult =
   | { kind: "run"; config: RunConfig }
+  | { kind: "models" }
   | { kind: "tools"; tools: ToolSource[] }
   | { kind: "help" | "version"; text: string };
 
@@ -38,6 +39,7 @@ export async function loadConfig(
   const flags = parseFlags(argv);
   if (flags.kind === "help") return { kind: "help", text: HELP };
   if (flags.kind === "version") return { kind: "version", text: VERSION };
+  if (flags.kind === "models") return { kind: "models" };
 
   const invCwd = path.resolve(opts.cwd ?? process.cwd());
   const settingsFile = flags.settings ? path.resolve(invCwd, flags.settings) : undefined;
@@ -79,7 +81,10 @@ export async function loadConfig(
     flagCfg[k] ?? fm[k] ?? settings[k];
 
   const model = pick("model");
-  if (!model) throw new ConfigError("model: required (use --model, frontmatter or settings)");
+  if (!model)
+    throw new ConfigError(
+      "model: required (use --model, frontmatter or settings; `twigg-agent models` lists them)",
+    );
 
   const bp = base.permissions ?? {};
   const fp = fm.permissions ?? {};

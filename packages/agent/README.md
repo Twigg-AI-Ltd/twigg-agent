@@ -5,7 +5,8 @@ can write in any language. One file, no dependencies, about 105 kB installed.
 
 ```sh
 npm install -g @twigg/agent
-export TWIGG_API_KEY=tw_live_...
+export TWIGG_API_KEY=tw_live_...    # create one at https://twigg.ai
+twigg-agent models                  # the models your key can use
 twigg-agent task.md --model claude-sonnet-5 --max-cost 1
 ```
 

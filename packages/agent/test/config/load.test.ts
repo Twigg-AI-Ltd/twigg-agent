@@ -681,6 +681,10 @@ describe("custom tools", () => {
     });
     expect(await loadConfig(["tools"], { cwd: dir })).toEqual({ kind: "tools", tools: [] });
   });
+
+  it("has a models command that needs no instructions file", async () => {
+    expect(await loadConfig(["models"], { cwd: dir })).toEqual({ kind: "models" });
+  });
 });
 
 describe("bash", () => {

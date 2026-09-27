@@ -59,11 +59,16 @@ export async function runMain(
   // Setup: validate models.
   try {
     const names = new Set(await client.listModelNames());
-    const wanted = [config.model, config.fallbackModel, ...config.subagentModels].filter(
-      (m): m is string => m !== undefined,
+    const wanted = new Set(
+      [config.model, config.fallbackModel, ...config.subagentModels].filter(
+        (m): m is string => m !== undefined,
+      ),
     );
-    const unknown = wanted.filter((m) => !names.has(m));
-    if (unknown.length) return setupError(`unknown or inactive model(s): ${unknown.join(", ")}`);
+    const unknown = [...wanted].filter((m) => !names.has(m));
+    if (unknown.length)
+      return setupError(
+        `unknown or inactive model(s): ${unknown.join(", ")}; \`twigg-agent models\` lists the models you can use`,
+      );
   } catch (e) {
     return setupError(`Twigg setup failed: ${e instanceof Error ? e.message : String(e)}`);
   }

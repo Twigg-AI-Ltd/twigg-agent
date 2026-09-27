@@ -98,6 +98,8 @@ export function createTwiggClient(opts: TwiggClientOptions): TwiggClient {
       return json<HistoryPageResponse>("GET", `/chats/${encodeURIComponent(chatId)}/history${qs}`);
     },
 
+    listModels: () => json<CatalogueModel[]>("GET", "/models"),
+
     async listModelNames() {
       const models = await json<CatalogueModel[]>("GET", "/models");
       return models.map((m) => m.name);

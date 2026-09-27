@@ -124,18 +124,21 @@ describe("createTwiggClient", () => {
     expect(t.error?.code).toBe("stream_incomplete");
   });
 
-  it("listModelNames, getHistory, createChat", async () => {
+  it("listModels, listModelNames, getHistory, createChat", async () => {
     const { c, calls } = client([
+      jsonRes([{ name: "gpt-6-luna", rates: { input: "0.1" } }]),
       jsonRes([{ name: "gpt-6-luna" }, { name: "claude-sonnet-5" }]),
       jsonRes({ parts: [] }),
       jsonRes({ id: "chat" }),
     ]);
+    expect(await c.listModels()).toEqual([{ name: "gpt-6-luna", rates: { input: "0.1" } }]);
+    expect(calls[0]?.url).toBe("https://example.test/api/v1/models");
     expect(await c.listModelNames()).toEqual(["gpt-6-luna", "claude-sonnet-5"]);
     await c.getHistory("c", { beforeOrdinal: 5, limit: 10 });
-    expect(calls[1]?.url).toBe(
+    expect(calls[2]?.url).toBe(
       "https://example.test/api/v1/chats/c/history?before_ordinal=5&limit=10",
     );
     await c.createChat({ namespace: "a/b" });
-    expect(calls[2]).toMatchObject({ method: "POST", body: { namespace: "a/b" } });
+    expect(calls[3]).toMatchObject({ method: "POST", body: { namespace: "a/b" } });
   });
 });
