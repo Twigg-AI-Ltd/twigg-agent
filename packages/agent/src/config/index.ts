@@ -1,12 +1,12 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import { parse as parseYaml } from "yaml";
 import { agentNamespaces } from "../agent/namespace.js";
 import type { RunConfig, ToolSource } from "../core/types.js";
 import { DEFAULT_PROTECTED_PATHS } from "../permissions/index.js";
 import { resolveToolDir, STATE_DIR } from "../tools/custom.js";
 import { HELP, parseFlags, VERSION } from "./flags.js";
 import { ConfigError, type FileConfig, parseFileConfig } from "./schema.js";
+import { parseYaml } from "./yaml.js";
 
 export { HELP } from "./flags.js";
 export { ConfigError, parseDuration } from "./schema.js";

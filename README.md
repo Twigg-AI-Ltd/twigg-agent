@@ -1,14 +1,13 @@
 # twigg-agent
 
 ```text
-                                                (@) | (@)
-████████╗██╗    ██╗██╗ ██████╗  ██████╗          \  |  /
-╚══██╔══╝██║    ██║██║██╔════╝ ██╔════╝     (@)   \ | /   (@)
-   ██║   ██║ █╗ ██║██║██║  ███╗██║  ███╗     \_____\|/_____/
-   ██║   ██║███╗██║██║██║   ██║██║   ██║            |
-   ██║   ╚███╔███╔╝██║╚██████╔╝╚██████╔╝            |
-   ╚═╝    ╚══╝╚══╝ ╚═╝ ╚═════╝  ╚═════╝             |
-            a   g   e   n   t                       |
+████████╗██╗    ██╗██╗ ██████╗  ██████╗
+╚══██╔══╝██║    ██║██║██╔════╝ ██╔════╝
+   ██║   ██║ █╗ ██║██║██║  ███╗██║  ███╗
+   ██║   ██║███╗██║██║██║   ██║██║   ██║
+   ██║   ╚███╔███╔╝██║╚██████╔╝╚██████╔╝
+   ╚═╝    ╚══╝╚══╝ ╚═╝ ╚═════╝  ╚═════╝
+            a   g   e   n   t
 ```
 
 An ultra-lightweight, one-shot agent for the command line. Give it a Markdown file of instructions
@@ -18,8 +17,8 @@ and it works through them with tools, then exits with `success`, `failed` or
 It runs on the [Twigg](https://twigg.ai) API, which manages the context. twigg-agent is purely a
 harness: it runs the agent loop and the tools on your machine.
 
-- **Ultra lightweight:** a single file of under 1 MB with no dependencies, a 240 KB download,
-  starting in under 0.1 s. See [At a glance](#at-a-glance).
+- **Ultra lightweight:** a single file of about 105 kB with no dependencies, a 40 kB download,
+  starting in about 0.03 s. See [At a glance](#at-a-glance).
 - **Built-in tools:** read, write, edit, delete, glob, grep, web_fetch, todo, wait, parallel
   subagents, and bash if you enable it.
 - **Your own tools, in any language:** a folder with a `tool.json` and a program that reads JSON
@@ -38,12 +37,32 @@ harness: it runs the agent loop and the tools on your machine.
 
 | | |
 | --- | --- |
-| Installed size | 920 KB, one file |
-| Download | 240 KB |
+| Installed size | 105 kB, one file |
+| Download | 40 kB |
 | Runtime dependencies | none |
+| Start-up | about 0.03 s |
+| Memory at start-up | about 50 MB |
 
-That's about 1 MB installed, where full coding-agent CLIs are typically 100–400 MB. Measured for
-v0.1.0; needs Node 22.13 or later.
+It needs Node 22.13 or later.
+
+For scale, here is what some well-known agent CLIs take up once installed with
+`npm install -g` (measured on Linux in September 2026; their sizes change with each release):
+
+| CLI | Installed size |
+| --- | --- |
+| **twigg-agent** | **0.1 MB** |
+| Gemini CLI | 102 MB |
+| pi-coding-agent | 151 MB |
+| Claude Code | 242 MB |
+| opencode | 370 MB |
+| Codex | 391 MB |
+
+Those are full interactive coding agents, so this isn't a like-for-like comparison. The
+difference is where the work happens: Twigg keeps the conversation, fits it to the model and
+talks to the providers, so the harness holds no provider SDKs, no transcript store and no token
+counting. What is left (the agent loop, the tools, the permissions, and small readers for
+settings, frontmatter and HTML) is written against Node's standard library. The build fails if
+the file grows past 120 kB or needs a package at run time.
 
 ## Install
 
@@ -61,7 +80,9 @@ twigg-agent task.md --model claude-sonnet-5 --max-cost 1 --output result.json
 ```
 
 `task.md` is a plain Markdown file. It may start with YAML frontmatter using the same keys as a settings
-file; frontmatter can only tighten permissions and limits, never loosen them.
+file; frontmatter can only tighten permissions and limits, never loosen them. Frontmatter is read
+as plain YAML: mappings, lists and single-line values. Anchors, tags and multi-line strings are
+reported as errors.
 
 ```markdown
 ---

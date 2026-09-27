@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as s from "../core/schema.js";
 
 /** Invalid configuration. The message names the offending flag or field. */
 export class ConfigError extends Error {
@@ -21,86 +21,81 @@ export function parseDuration(value: string | number): number | undefined {
   return ms > 0 ? ms : undefined;
 }
 
-const duration = z.union([z.number(), z.string()]).transform((v, ctx) => {
-  const ms = parseDuration(v);
-  if (ms === undefined) {
-    ctx.addIssue({ code: "custom", message: `invalid duration ${JSON.stringify(v)}` });
-    return z.NEVER;
-  }
-  return ms;
-});
+const duration = s.custom(
+  { type: ["number", "string"] },
+  (v) => (typeof v === "number" || typeof v === "string" ? parseDuration(v) : undefined),
+  (v) => `invalid duration ${JSON.stringify(v)}`,
+);
 
-const posInt = z.number().int().positive();
+const text = s.string({ min: 1 });
+const posInt = s.number({ int: true, gt: 0 });
 
 /** Shared schema of the settings file and the instructions-file frontmatter. */
-export const FileConfigSchema = z.strictObject({
-  model: z.string().min(1).optional(),
-  fallbackModel: z.string().min(1).optional(),
-  namespace: z
-    .string()
-    .regex(NAMESPACE_RE, "must match ^[a-z0-9_-]{1,64}(/[a-z0-9_-]{1,64})*$")
-    .optional(),
-  permissions: z
-    .strictObject({
-      root: z.string().min(1).optional(),
-      read: z.boolean().optional(),
-      write: z.boolean().optional(),
-      delete: z.boolean().optional(),
-      network: z.boolean().optional(),
-      /** Offer the unsandboxed bash tool. Off by default; frontmatter can't turn it on. */
-      bash: z.boolean().optional(),
-      disabledTools: z.array(z.string().min(1)).optional(),
-      protectedPaths: z.array(z.string().min(1)).optional(),
-    })
-    .optional(),
-  limits: z
-    .strictObject({
-      maxCostUsd: z.number().positive().optional(),
-      maxTurns: posInt.optional(),
-      timeout: duration.optional(),
-      toolTimeout: duration.optional(),
-      warnAt: z.number().gt(0).lt(1).optional(),
-    })
-    .optional(),
-  subagents: z
-    .strictObject({
-      models: z.array(z.string().min(1)).optional(),
-      maxConcurrent: posInt.optional(),
-    })
-    .optional(),
-  maxTokens: posInt.optional(),
-  reasoningEffort: z.enum(REASONING_EFFORTS).optional(),
-  output: z.string().min(1).optional(),
-  logFormat: z.enum(["human", "json"]).optional(),
-  logFile: z.string().min(1).optional(),
-  progressEvery: posInt.optional(),
-  /**
-   * Custom tools: npm package names or folder paths, optionally with environment values for the
-   * tool. Settings and flags only, not frontmatter.
-   */
-  tools: z
-    .array(
-      z.union([
-        z.string().min(1),
-        z.strictObject({
-          use: z.string().min(1),
-          env: z.record(z.string(), z.string()).optional(),
-        }),
-      ]),
-    )
-    .optional(),
-});
+export const FileConfigSchema = s.object(
+  {
+    model: text.optional(),
+    fallbackModel: text.optional(),
+    namespace: s
+      .string({
+        pattern: NAMESPACE_RE,
+        message: "must match ^[a-z0-9_-]{1,64}(/[a-z0-9_-]{1,64})*$",
+      })
+      .optional(),
+    permissions: s
+      .object(
+        {
+          root: text.optional(),
+          read: s.boolean().optional(),
+          write: s.boolean().optional(),
+          delete: s.boolean().optional(),
+          network: s.boolean().optional(),
+          /** Offer the unsandboxed bash tool. Off by default; frontmatter can't turn it on. */
+          bash: s.boolean().optional(),
+          disabledTools: s.array(text).optional(),
+          protectedPaths: s.array(text).optional(),
+        },
+        "strict",
+      )
+      .optional(),
+    limits: s
+      .object(
+        {
+          maxCostUsd: s.number({ gt: 0 }).optional(),
+          maxTurns: posInt.optional(),
+          timeout: duration.optional(),
+          toolTimeout: duration.optional(),
+          warnAt: s.number({ gt: 0, lt: 1 }).optional(),
+        },
+        "strict",
+      )
+      .optional(),
+    subagents: s
+      .object({ models: s.array(text).optional(), maxConcurrent: posInt.optional() }, "strict")
+      .optional(),
+    maxTokens: posInt.optional(),
+    reasoningEffort: s.oneOf(REASONING_EFFORTS).optional(),
+    output: text.optional(),
+    logFormat: s.oneOf(["human", "json"]).optional(),
+    logFile: text.optional(),
+    progressEvery: posInt.optional(),
+    /**
+     * Custom tools: npm package names or folder paths, optionally with environment values for the
+     * tool. Settings and flags only, not frontmatter.
+     */
+    tools: s
+      .array(s.union(text, s.object({ use: text, env: s.record(s.string()).optional() }, "strict")))
+      .optional(),
+  },
+  "strict",
+);
 
 /** Parsed file config; durations are milliseconds. */
-export type FileConfig = z.output<typeof FileConfigSchema>;
+export type FileConfig = s.Infer<typeof FileConfigSchema>;
 
 /** Validates raw settings/frontmatter data; `source` prefixes error messages. */
 export function parseFileConfig(data: unknown, source: string): FileConfig {
-  const res = FileConfigSchema.safeParse(data ?? {});
-  if (res.success) return res.data;
-  const issue = res.error.issues[0];
-  const path = issue?.path.join(".") || "(root)";
-  let msg = issue?.message ?? "invalid";
-  if (issue?.code === "unrecognized_keys") msg = `unknown key(s) ${issue.keys.join(", ")}`;
-  throw new ConfigError(`${source}: ${path}: ${msg}`);
+  const res = FileConfigSchema.parse(data ?? {});
+  if (res.ok) return res.value;
+  const issue = res.issues[0];
+  throw new ConfigError(`${source}: ${issue?.path || "(root)"}: ${issue?.message ?? "invalid"}`);
 }

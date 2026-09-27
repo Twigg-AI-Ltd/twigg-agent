@@ -1,7 +1,7 @@
 // Helpers shared by the built-in tools.
 
 import { relative } from "node:path";
-import { z } from "zod";
+import { formatIssues, type Schema } from "../core/schema.js";
 import type { JsonSchemaObject, Tool, ToolContext, ToolOutput } from "../core/types.js";
 
 export function ok(text: string): ToolOutput {
@@ -13,24 +13,23 @@ export function fail(text: string): ToolOutput {
 }
 
 /** Builds a Tool whose input is validated by `schema`; `run` errors become isError results. */
-export function defineTool<S extends z.ZodObject>(spec: {
+export function defineTool<T extends object>(spec: {
   name: string;
   description: string;
-  schema: S;
-  run(input: z.infer<S>, ctx: ToolContext): Promise<ToolOutput>;
+  schema: Schema<T>;
+  run(input: T, ctx: ToolContext): Promise<ToolOutput>;
 }): Tool {
-  const { $schema: _, ...inputSchema } = z.toJSONSchema(spec.schema) as Record<string, unknown>;
   return {
     name: spec.name,
     description: spec.description,
-    inputSchema: inputSchema as JsonSchemaObject,
+    inputSchema: spec.schema.json as JsonSchemaObject,
     async run(input, ctx) {
-      const parsed = spec.schema.safeParse(input);
-      if (!parsed.success) {
-        return fail(`Invalid input for ${spec.name}:\n${z.prettifyError(parsed.error)}`);
+      const parsed = spec.schema.parse(input);
+      if (!parsed.ok) {
+        return fail(`Invalid input for ${spec.name}:\n${formatIssues(parsed.issues)}`);
       }
       try {
-        return await spec.run(parsed.data, ctx);
+        return await spec.run(parsed.value, ctx);
       } catch (err) {
         return fail(`${spec.name} failed: ${err instanceof Error ? err.message : String(err)}`);
       }
@@ -65,4 +64,5 @@ export function lastRead(agentId: string, path: string) {
   return readState.get(agentId)?.get(path);
 }
 
-export const IGNORED_DIRS = ["**/node_modules/**", "**/.git/**"];
+/** Folders that glob and grep never look into. */
+export const IGNORED_DIRS = ["node_modules", ".git"];

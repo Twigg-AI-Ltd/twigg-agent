@@ -1,5 +1,5 @@
 import { lstat, rm } from "node:fs/promises";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { checkPath } from "../permissions/index.js";
 import { defineTool, fail, ok } from "./util.js";
 
@@ -8,9 +8,9 @@ export const deleteTool = defineTool({
   description:
     "Delete a file or symlink. Deleting a directory requires recursive: true and removes " +
     "everything in it.",
-  schema: z.object({
-    path: z.string().describe("Path, absolute or relative to the working directory."),
-    recursive: z.boolean().optional().describe("Required to delete a directory."),
+  schema: s.object({
+    path: s.string().describe("Path, absolute or relative to the working directory."),
+    recursive: s.boolean().optional().describe("Required to delete a directory."),
   }),
   async run(input, ctx) {
     const check = await checkPath(ctx, input.path, "delete");

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { defineTool, ok } from "./util.js";
 
 export const todoTool = defineTool({
@@ -6,9 +6,9 @@ export const todoTool = defineTool({
   description:
     "Replace your task checklist with the given items. Use it to plan multi-step work and " +
     "mark items done as you go. Send the full list each time.",
-  schema: z.object({
-    items: z
-      .array(z.object({ text: z.string().min(1), done: z.boolean() }))
+  schema: s.object({
+    items: s
+      .array(s.object({ text: s.string({ min: 1 }), done: s.boolean() }))
       .describe("The complete checklist."),
   }),
   async run(input, ctx) {

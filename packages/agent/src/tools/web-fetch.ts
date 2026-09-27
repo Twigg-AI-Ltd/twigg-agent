@@ -1,24 +1,18 @@
-import TurndownService from "turndown";
-import { z } from "zod";
+import * as s from "../core/schema.js";
 import { blockedOutput } from "../permissions/index.js";
+import { htmlToMarkdown } from "./html.js";
 import { defineTool, fail, ok } from "./util.js";
 
 const MAX_CHARS = 50_000;
 const TEXT_TYPES = /^(text\/|application\/(json|xml|javascript|[\w.+-]+\+(json|xml)))/;
-
-function htmlToMarkdown(html: string): string {
-  const td = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced" });
-  td.remove(["script", "style", "noscript"]);
-  return td.turndown(html);
-}
 
 export const webFetchTool = defineTool({
   name: "web_fetch",
   description:
     "Fetch a URL over HTTP(S). HTML is converted to markdown; JSON and text are returned as-is. " +
     `Output is capped at ${MAX_CHARS} characters.`,
-  schema: z.object({
-    url: z.string().min(1).describe("http:// or https:// URL."),
+  schema: s.object({
+    url: s.string({ min: 1 }).describe("http:// or https:// URL."),
   }),
   async run(input, ctx) {
     if (!ctx.permissions.network) return blockedOutput(`fetch ${input.url}`);
@@ -48,7 +42,7 @@ export const webFetchTool = defineTool({
     }
 
     const body = await res.text();
-    let text = type.includes("html") ? htmlToMarkdown(body) : body;
+    let text = type.includes("html") ? htmlToMarkdown(body, res.url || url.href) : body;
     if (text.length > MAX_CHARS) {
       text = `${text.slice(0, MAX_CHARS)}\n\n[Truncated: ${text.length - MAX_CHARS} more characters.]`;
     }
