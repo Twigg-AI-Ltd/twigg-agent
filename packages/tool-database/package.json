@@ -1,6 +1,6 @@
 {
   "name": "@twigg/agent-database",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A persistent JSON document store (SQLite) for twigg-agent: collections of records the agent can find, get, upsert and delete",
   "license": "MIT",
   "type": "module",
