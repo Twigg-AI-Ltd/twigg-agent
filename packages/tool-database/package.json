@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "twigg-agent-db": "./db.js"
+    "twigg-agent-db": "db.js"
   },
   "files": [
     "tool.json",

@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "twigg-agent": "./cli.js"
+    "twigg-agent": "cli.js"
   },
   "files": [
     "cli.js"
