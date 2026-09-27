@@ -101,6 +101,13 @@ export function parseHtml(html: string): Element {
   const top = () => open[open.length - 1] as Element;
   const closeTo = (index: number) => open.splice(Math.max(index, 1));
   const lower = html.toLowerCase();
+  // The next ">" at or after `from`, remembered so that a run of stray "<" doesn't search the
+  // rest of the page once per "<". -1 means there is none left, which stays true.
+  let nextGt = -2;
+  const gtFrom = (from: number) => {
+    if (nextGt !== -1 && nextGt < from) nextGt = html.indexOf(">", from);
+    return nextGt;
+  };
 
   let i = 0;
   while (i < html.length) {
@@ -117,7 +124,7 @@ export function parseHtml(html: string): Element {
       continue;
     }
     const m = /^<(\/?)([a-zA-Z][^\s/>]*)/.exec(html.slice(i, i + 80));
-    const gt = html.indexOf(">", i);
+    const gt = gtFrom(i);
     if (!m) {
       // A declaration such as <!doctype> is dropped; a stray "<" is text.
       if (/^<[!?]/.test(html.slice(i, i + 2)) && gt !== -1) i = gt + 1;

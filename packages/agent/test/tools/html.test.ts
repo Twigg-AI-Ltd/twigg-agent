@@ -106,6 +106,13 @@ describe("htmlToMarkdown", () => {
     expect(md(long).length).toBeGreaterThan(200_000);
   });
 
+  it("reads a long run of stray < quickly", () => {
+    const start = performance.now();
+    expect(md("<".repeat(1_000_000)).length).toBe(1_000_000);
+    expect(md(`${"< ".repeat(500_000)}<b>x</b>`)).toContain("**x**");
+    expect(performance.now() - start).toBeLessThan(2000);
+  });
+
   it("decodes entities", () => {
     expect(decodeEntities("&lt;a&gt; &amp; &quot;b&quot; &#65;&#x42; &mdash; &nope; &#0;")).toBe(
       '<a> & "b" AB — &nope; &#0;',
