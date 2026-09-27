@@ -32,6 +32,10 @@ Trusted publishing → GitHub Actions**, and enter:
 | Repository | `twigg-agent` |
 | Workflow filename | `release.yml` |
 | Environment | leave empty |
+| Allowed actions | tick **Allow npm publish** |
+
+Without **Allow npm publish** the workflow may only stage a release, and publishing fails with
+`403 Forbidden ... OIDC permission denied for this action`.
 
 A new package has to be published by hand once (`npm publish --access public` in its folder)
 before it can be set up.

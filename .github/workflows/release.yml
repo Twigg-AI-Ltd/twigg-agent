@@ -26,6 +26,8 @@ jobs:
       - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      # Built before publishing, so that npm finds each package's bin file when it checks it.
+      - run: pnpm build
 
       - name: Check the tag matches the package versions
         run: |
