@@ -1,6 +1,6 @@
 # @twigg/agent
 
-An ultra-lightweight, one-shot agent CLI for the [Twigg](https://twigg.ai) API, with tools you
+A one-shot, non-interactive agent CLI for the [Twigg](https://twigg.ai) API, with tools you
 can write in any language. One file, no dependencies, about 105 kB installed.
 
 ```sh
