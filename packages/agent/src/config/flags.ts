@@ -16,7 +16,11 @@ Run a one-shot, non-interactive agent against the Twigg API.
 
 Usage:
   twigg-agent <instructions.md> [options]
+  twigg-agent models                                                List the models you can use
   twigg-agent tools [--tool <pkg|path>] [--settings <file.json>]   List custom tools
+
+Needs a Twigg API key in TWIGG_API_KEY (the environment or ./.env). Create one at
+https://twigg.ai.
 
 The instructions file may start with YAML frontmatter (between --- lines) using the same keys
 as the settings file. Frontmatter may only tighten permissions, limits and subagents.
@@ -70,7 +74,7 @@ Output:
   -v, --version                      Show the version`;
 
 export interface ParsedFlags {
-  kind: "run" | "tools" | "help" | "version";
+  kind: "run" | "models" | "tools" | "help" | "version";
   instructions?: string;
   settings?: string;
   cwd?: string;
@@ -153,6 +157,8 @@ export function parseFlags(argv: string[]): ParsedFlags {
   const { values: v, positionals } = parseStrict(argv);
   if (v.help) return { kind: "help", config: {} };
   if (v.version) return { kind: "version", config: {} };
+  if (positionals.length === 1 && positionals[0] === "models")
+    return { kind: "models", config: {} };
   if (positionals.length === 1 && positionals[0] === "tools") {
     return {
       kind: "tools",

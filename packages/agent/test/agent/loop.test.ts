@@ -73,6 +73,7 @@ function fakeClient(scripts: Step[][]) {
     getHistory: async () => {
       throw new Error("unused");
     },
+    listModels: async () => [],
     listModelNames: async () => [],
   };
   return { client, requests };

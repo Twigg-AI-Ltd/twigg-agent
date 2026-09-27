@@ -1,6 +1,7 @@
 // Contract for the Twigg client (implemented in src/api/). agent/ depends only on this.
 
 import type {
+  CatalogueModel,
   ChatCreated,
   CreateChatRequest,
   CreateResponseRequest,
@@ -105,5 +106,7 @@ export interface TwiggClient {
     chatId: string,
     query?: { beforeOrdinal?: number; afterOrdinal?: number; limit?: number },
   ): Promise<HistoryPageResponse>;
+  /** The models the API key may use, with their rates. */
+  listModels(): Promise<CatalogueModel[]>;
   listModelNames(): Promise<string[]>;
 }

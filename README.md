@@ -50,11 +50,13 @@ package at run time.
 
 ## Install
 
-Requires Node 22.13 or later and a Twigg API key.
+Requires Node 22.13 or later and a Twigg API key, which you can create at
+[twigg.ai](https://twigg.ai).
 
 ```sh
 npm install -g @twigg/agent
 export TWIGG_API_KEY=tw_live_...    # or put TWIGG_API_KEY=... in ./.env
+twigg-agent models                  # the models your key can use, with their prices
 ```
 
 ## Usage
